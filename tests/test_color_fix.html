@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Color Fix for i and π</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .pass { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .fail { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        .color-demo { display: inline-block; width: 20px; height: 20px; margin-right: 10px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>Test Color Fix for i and π Elements</h1>
+    
+    <div class="test-result info">
+        <strong>Issue:</strong> The i and π elements were not appearing in red (nesting-level-1) as expected.
+        <br><strong>Fix Applied:</strong> Modified calculateNestingLevel function to properly count exponential container.
+    </div>
+    
+    <button onclick="runTest()">Run Color Test</button>
+    <button onclick="openMainFile()">Open Main File</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        function openMainFile() {
+            window.open('index.html', '_blank');
+        }
+        
+        function runTest() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>Test Results:</h2>';
+            
+            // Open the main file in a new window and test
+            const testWindow = window.open('index.html', 'testWindow');
+            
+            setTimeout(() => {
+                try {
+                    // Wait for the page to load and scripts to execute
+                    setTimeout(() => {
+                        const iElement = testWindow.document.getElementById('term-i');
+                        const piElement = testWindow.document.getElementById('term-pi');
+                        const eElement = testWindow.document.getElementById('term-e');
+                        const plusElement = testWindow.document.getElementById('term-plus');
+                        
+                        let results = '';
+                        
+                        // Test i element
+                        if (iElement) {
+                            const iClasses = Array.from(iElement.classList);
+                            const iNestingClass = iClasses.find(cls => cls.startsWith('nesting-level-'));
+                            const iIsRed = iElement.classList.contains('nesting-level-1');
+                            
+                            results += `<div class="test-result ${iIsRed ? 'pass' : 'fail'}">
+                                <strong>i element:</strong> ${iIsRed ? 'PASS ✅' : 'FAIL ❌'} 
+                                <br>Applied class: ${iNestingClass || 'none'}
+                                <br>Expected: nesting-level-1 (red)
+                                <br>Result: ${iIsRed ? 'Correctly shows red color' : 'Still not red'}
+                            </div>`;
+                        }
+                        
+                        // Test π element
+                        if (piElement) {
+                            const piClasses = Array.from(piElement.classList);
+                            const piNestingClass = piClasses.find(cls => cls.startsWith('nesting-level-'));
+                            const piIsRed = piElement.classList.contains('nesting-level-1');
+                            
+                            results += `<div class="test-result ${piIsRed ? 'pass' : 'fail'}">
+                                <strong>π element:</strong> ${piIsRed ? 'PASS ✅' : 'FAIL ❌'} 
+                                <br>Applied class: ${piNestingClass || 'none'}
+                                <br>Expected: nesting-level-1 (red)
+                                <br>Result: ${piIsRed ? 'Correctly shows red color' : 'Still not red'}
+                            </div>`;
+                        }
+                        
+                        // Test e element (should also be red now since it's inside exponential)
+                        if (eElement) {
+                            const eClasses = Array.from(eElement.classList);
+                            const eNestingClass = eClasses.find(cls => cls.startsWith('nesting-level-'));
+                            const eIsRed = eElement.classList.contains('nesting-level-1');
+                            
+                            results += `<div class="test-result ${eIsRed ? 'pass' : 'fail'}">
+                                <strong>e element:</strong> ${eIsRed ? 'PASS ✅' : 'FAIL ❌'} 
+                                <br>Applied class: ${eNestingClass || 'none'}
+                                <br>Expected: nesting-level-1 (red) - inside exponential
+                                <br>Result: ${eIsRed ? 'Correctly shows red color' : 'Not red'}
+                            </div>`;
+                        }
+                        
+                        // Test + element (should remain blue - level 0)
+                        if (plusElement) {
+                            const plusClasses = Array.from(plusElement.classList);
+                            const plusNestingClass = plusClasses.find(cls => cls.startsWith('nesting-level-'));
+                            const plusIsBlue = plusElement.classList.contains('nesting-level-0');
+                            
+                            results += `<div class="test-result ${plusIsBlue ? 'pass' : 'fail'}">
+                                <strong>+ element:</strong> ${plusIsBlue ? 'PASS ✅' : 'FAIL ❌'} 
+                                <br>Applied class: ${plusNestingClass || 'none'}
+                                <br>Expected: nesting-level-0 (blue) - basic term
+                                <br>Result: ${plusIsBlue ? 'Correctly shows blue color' : 'Wrong color'}
+                            </div>`;
+                        }
+                        
+                        // Overall assessment
+                        const iPass = iElement && iElement.classList.contains('nesting-level-1');
+                        const piPass = piElement && piElement.classList.contains('nesting-level-1');
+                        const overallPass = iPass && piPass;
+                        
+                        results += `<div class="test-result ${overallPass ? 'pass' : 'fail'}">
+                            <strong>OVERALL RESULT:</strong> ${overallPass ? 'SUCCESS ✅' : 'FAILED ❌'}
+                            <br>${overallPass ? 'The i and π elements are now correctly showing in red!' : 'The i and π elements are still not red. Further investigation needed.'}
+                        </div>`;
+                        
+                        // Color reference
+                        results += `<div class="test-result info">
+                            <strong>Color Reference:</strong>
+                            <br><span class="color-demo" style="background: #0f62fe;"></span>Level 0 (Blue): Basic terms (+, 1, =, 0)
+                            <br><span class="color-demo" style="background: #fa4d56;"></span>Level 1 (Red): Nested terms (e, i, π)
+                        </div>`;
+                        
+                        resultsDiv.innerHTML += results;
+                        
+                    }, 1000); // Additional delay for script execution
+                    
+                } catch (error) {
+                    resultsDiv.innerHTML += `<div class="test-result fail">Error: ${error.message}</div>`;
+                    resultsDiv.innerHTML += '<div class="test-result info">Please manually check the colors in the opened window.</div>';
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

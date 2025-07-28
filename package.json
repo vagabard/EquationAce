@@ -1,0 +1,22 @@
+{
+  "name": "EquationAce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "node tests/test-runner.js",
+    "test:manual": "echo 'Opening test files for manual verification...' && start tests/final_test.html",
+    "prebuild": "npm run test",
+    "postbuild": "echo 'Build completed. Run npm run test:manual for manual verification.'",
+    "verify": "npm run test && npm run test:manual"
+  },
+  "dependencies": {
+    "mathjax": "^3.2.2"
+  },
+  "devDependencies": {
+    "@types/mathjax": "^0.0.37",
+    "typescript": "^5.5.3"
+  },
+  "private": true
+}

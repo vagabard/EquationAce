@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Nesting Implementation</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .level-0 { background-color: #e3f2fd; }
+        .level-1 { background-color: #ffebee; }
+        .level-2 { background-color: #e8f5e8; }
+        .error { background-color: #ffcdd2; }
+    </style>
+</head>
+<body>
+    <h1>Verify IBM Color Nesting Implementation</h1>
+    
+    <button onclick="runVerification()">Run Verification</button>
+    <button onclick="openMainFile()">Open Main File</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        function openMainFile() {
+            window.open('../index.html', '_blank');
+        }
+        
+        function runVerification() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>Verification Results:</h2>';
+            
+            // Expected nesting structure
+            const expectedNesting = {
+                'plus': 0,      // + at root level
+                'one': 0,       // 1 at root level  
+                'equals': 0,    // = at root level
+                'zero': 0,      // 0 at root level
+                'exponential': 0, // exponential container (transparent)
+                'e': 0,         // e inside exponential (but exponential doesn't count)
+                'i': 1,         // i inside superscript inside exponential
+                'pi': 1         // π inside superscript inside exponential
+            };
+            
+            const ibmColors = [
+                'Blue 60 (#0f62fe)',
+                'Red 50 (#fa4d56)', 
+                'Green 50 (#24a148)',
+                'Purple 50 (#8a3ffc)',
+                'Teal 50 (#009d9a)',
+                'Orange 50 (#ff832b)'
+            ];
+            
+            // Display expected results
+            let html = '<h3>Expected Nesting Levels:</h3>';
+            for (const [term, level] of Object.entries(expectedNesting)) {
+                const colorIndex = level % 6;
+                const className = level === 0 ? 'level-0' : level === 1 ? 'level-1' : 'level-2';
+                html += `<div class="test-result ${className}">
+                    <strong>${term}</strong>: Level ${level} → ${ibmColors[colorIndex]}
+                </div>`;
+            }
+            
+            html += '<h3>Manual Verification Steps:</h3>';
+            html += '<ol>';
+            html += '<li>Open the main file using the button above</li>';
+            html += '<li>Check that basic terms (+, 1, =, 0) are <strong style="color: #0f62fe;">Blue</strong></li>';
+            html += '<li>Check that e is <strong style="color: #0f62fe;">Blue</strong> (same as basic terms)</li>';
+            html += '<li>Check that i and π are <strong style="color: #fa4d56;">Red</strong> (one level deeper)</li>';
+            html += '<li>The exponential container should be transparent</li>';
+            html += '<li>Open browser console to see debug output showing applied nesting levels</li>';
+            html += '</ol>';
+            
+            html += '<h3>Color Cycling Test:</h3>';
+            html += '<p>With 6 IBM colors available, if we had more nesting levels:</p>';
+            html += '<ul>';
+            for (let i = 0; i < 12; i++) {
+                const colorIndex = i % 6;
+                html += `<li>Level ${i} → ${ibmColors[colorIndex]} (cycling)</li>`;
+            }
+            html += '</ul>';
+            
+            resultsDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

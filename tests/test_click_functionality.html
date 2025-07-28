@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Click Functionality</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        #console-output {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Click Functionality Test</h1>
+        <p>This page will test the click functionality of the MathML elements in the main application.</p>
+        
+        <div id="test-results"></div>
+        
+        <h3>Console Output:</h3>
+        <div id="console-output"></div>
+        
+        <button onclick="runTests()" style="padding: 10px 20px; font-size: 16px; margin: 10px 0;">Run Tests</button>
+        <button onclick="openMainApp()" style="padding: 10px 20px; font-size: 16px; margin: 10px 0;">Open Main App</button>
+    </div>
+
+    <script>
+        let consoleOutput = document.getElementById('console-output');
+        let testResults = document.getElementById('test-results');
+        
+        // Override console.log to capture output
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            consoleOutput.textContent += args.join(' ') + '\n';
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+
+        function addTestResult(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.textContent = message;
+            testResults.appendChild(div);
+        }
+
+        function runTests() {
+            testResults.innerHTML = '';
+            consoleOutput.textContent = '';
+            
+            console.log('=== Starting Click Functionality Tests ===');
+            
+            // Test 1: Check if main page exists
+            fetch('index.html')
+                .then(response => {
+                    if (response.ok) {
+                        addTestResult('✓ Main index.html file exists', 'success');
+                        console.log('✓ Main index.html file exists');
+                        return response.text();
+                    } else {
+                        throw new Error('Main file not found');
+                    }
+                })
+                .then(html => {
+                    // Test 2: Check if MathML elements exist
+                    if (html.includes('clickable-term')) {
+                        addTestResult('✓ MathML elements with clickable-term class found', 'success');
+                        console.log('✓ MathML elements with clickable-term class found');
+                    } else {
+                        addTestResult('✗ No clickable-term elements found', 'error');
+                        console.log('✗ No clickable-term elements found');
+                    }
+                    
+                    // Test 3: Check if attachClickListeners function exists
+                    if (html.includes('attachClickListeners')) {
+                        addTestResult('✓ attachClickListeners function found', 'success');
+                        console.log('✓ attachClickListeners function found');
+                    } else {
+                        addTestResult('✗ attachClickListeners function not found', 'error');
+                        console.log('✗ attachClickListeners function not found');
+                    }
+                    
+                    // Test 4: Check if MathJax initialization calls attachClickListeners
+                    if (html.includes('attachClickListeners()')) {
+                        addTestResult('✓ attachClickListeners is called after MathJax rendering', 'success');
+                        console.log('✓ attachClickListeners is called after MathJax rendering');
+                    } else {
+                        addTestResult('✗ attachClickListeners is not called after MathJax rendering', 'error');
+                        console.log('✗ attachClickListeners is not called after MathJax rendering');
+                    }
+                    
+                    // Test 5: Check if term information exists
+                    if (html.includes('termInfo')) {
+                        addTestResult('✓ Term information object found', 'success');
+                        console.log('✓ Term information object found');
+                    } else {
+                        addTestResult('✗ Term information object not found', 'error');
+                        console.log('✗ Term information object not found');
+                    }
+                    
+                    // Test 6: Check if showTermDetails function exists
+                    if (html.includes('showTermDetails')) {
+                        addTestResult('✓ showTermDetails function found', 'success');
+                        console.log('✓ showTermDetails function found');
+                    } else {
+                        addTestResult('✗ showTermDetails function not found', 'error');
+                        console.log('✗ showTermDetails function not found');
+                    }
+                    
+                    console.log('=== Tests Complete ===');
+                    addTestResult('All automated tests completed. Please manually test clicking on the equation elements.', 'info');
+                })
+                .catch(error => {
+                    addTestResult('✗ Error loading main file: ' + error.message, 'error');
+                    console.log('✗ Error loading main file:', error.message);
+                });
+        }
+
+        function openMainApp() {
+            console.log('Opening main application...');
+            window.open('index.html', '_blank');
+        }
+
+        // Run tests automatically when page loads
+        window.addEventListener('load', function() {
+            setTimeout(runTests, 500);
+        });
+    </script>
+</body>
+</html>

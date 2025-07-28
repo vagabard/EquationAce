@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<equations xmlns:m="http://www.w3.org/1998/Math/MathML">
+  
+  <!-- Euler's Identity: e^(iπ) + 1 = 0 -->
+  <equation id="euler">
+    <title>Euler's Identity</title>
+    <subtitle>"The most beautiful equation in mathematics"</subtitle>
+    <content>
+      <m:math>
+        <m:apply>
+          <m:eq/>
+          <m:apply>
+            <m:plus/>
+            <m:apply>
+              <m:power/>
+              <m:exponentiale/>
+              <m:apply>
+                <m:times/>
+                <m:imaginaryi/>
+                <m:pi/>
+              </m:apply>
+            </m:apply>
+            <m:cn>1</m:cn>
+          </m:apply>
+          <m:cn>0</m:cn>
+        </m:apply>
+      </m:math>
+    </content>
+    <terms>
+      <term id="exponential" title="Exponential Operation (e^(...))" description="The exponential operation raises Euler's number e to the power of the complex expression (iπ). This demonstrates the profound connection between exponential functions and trigonometry through Euler's formula."/>
+      <term id="e" title="Euler's Number (e)" description="Euler's number e ≈ 2.71828... is a mathematical constant that is the base of natural logarithms. It appears naturally in many areas of mathematics, especially in calculus and complex analysis."/>
+      <term id="i" title="Imaginary Unit (i)" description="The imaginary unit i is defined as the square root of -1. It's the fundamental building block of complex numbers and enables us to extend real number arithmetic into the complex plane."/>
+      <term id="pi" title="Pi (π)" description="Pi (π) ≈ 3.14159... is the ratio of a circle's circumference to its diameter. In Euler's identity, π represents exactly half a revolution around the unit circle in the complex plane."/>
+      <term id="plus" title="Addition (+)" description="The addition operation combines the result of e^(iπ) with 1. Since e^(iπ) = -1, we have -1 + 1 = 0."/>
+      <term id="one" title="The Number One (1)" description="The multiplicative identity. In this context, it represents unity and completeness in the mathematical universe."/>
+      <term id="equals" title="Equality (=)" description="The equality sign shows that both sides of the equation have the same value, demonstrating the beautiful relationship between these fundamental constants."/>
+      <term id="zero" title="Zero (0)" description="Zero is the additive identity and represents nothingness or the absence of quantity. It's remarkable that the complex expression e^(iπ) + 1 simplifies to this fundamental number."/>
+    </terms>
+  </equation>
+
+  <!-- Normal Distribution: f(x) = (1/(σ√(2π))) * e^(-(x-μ)²/(2σ²)) -->
+  <equation id="normal">
+    <title>Normal Distribution</title>
+    <subtitle>"The bell curve that governs natural phenomena"</subtitle>
+    <content>
+      <m:math>
+        <m:apply>
+          <m:eq/>
+          <m:apply>
+            <m:ci>f</m:ci>
+            <m:ci>x</m:ci>
+          </m:apply>
+          <m:apply>
+            <m:times/>
+            <m:apply>
+              <m:divide/>
+              <m:cn>1</m:cn>
+              <m:apply>
+                <m:times/>
+                <m:ci>σ</m:ci>
+                <m:apply>
+                  <m:root/>
+                  <m:apply>
+                    <m:times/>
+                    <m:cn>2</m:cn>
+                    <m:pi/>
+                  </m:apply>
+                </m:apply>
+              </m:apply>
+            </m:apply>
+            <m:apply>
+              <m:power/>
+              <m:exponentiale/>
+              <m:apply>
+                <m:minus/>
+                <m:apply>
+                  <m:divide/>
+                  <m:apply>
+                    <m:power/>
+                    <m:apply>
+                      <m:minus/>
+                      <m:ci>x</m:ci>
+                      <m:ci>μ</m:ci>
+                    </m:apply>
+                    <m:cn>2</m:cn>
+                  </m:apply>
+                  <m:apply>
+                    <m:times/>
+                    <m:cn>2</m:cn>
+                    <m:apply>
+                      <m:power/>
+                      <m:ci>σ</m:ci>
+                      <m:cn>2</m:cn>
+                    </m:apply>
+                  </m:apply>
+                </m:apply>
+              </m:apply>
+            </m:apply>
+          </m:apply>
+        </m:apply>
+      </m:math>
+    </content>
+    <terms>
+      <term id="f" title="Function f(x)" description="The probability density function that gives the probability of the random variable x taking a specific value."/>
+      <term id="x" title="Variable x" description="The random variable for which we want to find the probability density."/>
+      <term id="equals" title="Equality (=)" description="Shows that the function f(x) equals the expression on the right side."/>
+      <term id="fraction" title="Normalization Factor" description="This fraction ensures that the total area under the curve equals 1, making it a proper probability distribution."/>
+      <term id="one" title="Numerator (1)" description="The constant numerator in the normalization factor."/>
+      <term id="sigma" title="Standard Deviation (σ)" description="A measure of the spread of the distribution. Larger σ means more spread out data."/>
+      <term id="sqrt" title="Square Root (√)" description="The square root operation applied to 2π."/>
+      <term id="two" title="Two (2)" description="The constant 2 under the square root, part of the normalization factor."/>
+      <term id="pi" title="Pi (π)" description="The mathematical constant π ≈ 3.14159, appearing in the normalization factor."/>
+      <term id="exponential" title="Exponential Function" description="The exponential function e raised to a negative power, creating the bell-shaped curve."/>
+      <term id="e" title="Euler's Number (e)" description="The base of the natural logarithm, e ≈ 2.71828."/>
+      <term id="minus" title="Negative Sign (−)" description="Makes the exponent negative, ensuring the function decreases as we move away from the mean."/>
+      <term id="exp-fraction" title="Exponent Fraction" description="This fraction in the exponent determines how quickly the probability decreases as x moves away from the mean μ."/>
+      <term id="x-var" title="Variable x (in exponent)" description="The same variable x, appearing in the exponent to measure distance from the mean."/>
+      <term id="minus2" title="Subtraction (−)" description="Subtracts the mean μ from x to center the distribution."/>
+      <term id="mu" title="Mean (μ)" description="The mean or average value of the distribution, determining where the bell curve is centered."/>
+      <term id="two2" title="Exponent (2)" description="The power of 2 in the numerator, making it a squared term."/>
+      <term id="two3" title="Denominator (2)" description="The constant 2 in the denominator of the exponent fraction."/>
+      <term id="sigma2" title="Standard Deviation (σ)" description="The same standard deviation σ, appearing squared in the denominator."/>
+      <term id="two4" title="Exponent (2)" description="The power of 2 applied to σ, making it σ²."/>
+    </terms>
+  </equation>
+
+  <!-- Gamma Function: Γ(z) = ∫₀^∞ t^(z-1) e^(-t) dt -->
+  <equation id="gamma">
+    <title>Gamma Function</title>
+    <subtitle>"The extension of factorial to real numbers"</subtitle>
+    <content>
+      <m:math>
+        <m:apply>
+          <m:eq/>
+          <m:apply>
+            <m:ci>Γ</m:ci>
+            <m:ci>z</m:ci>
+          </m:apply>
+          <m:apply>
+            <m:int/>
+            <m:bvar>
+              <m:ci>t</m:ci>
+            </m:bvar>
+            <m:lowlimit>
+              <m:cn>0</m:cn>
+            </m:lowlimit>
+            <m:uplimit>
+              <m:infinity/>
+            </m:uplimit>
+            <m:apply>
+              <m:times/>
+              <m:apply>
+                <m:power/>
+                <m:ci>t</m:ci>
+                <m:apply>
+                  <m:minus/>
+                  <m:ci>z</m:ci>
+                  <m:cn>1</m:cn>
+                </m:apply>
+              </m:apply>
+              <m:apply>
+                <m:power/>
+                <m:exponentiale/>
+                <m:apply>
+                  <m:minus/>
+                  <m:ci>t</m:ci>
+                </m:apply>
+              </m:apply>
+            </m:apply>
+          </m:apply>
+        </m:apply>
+      </m:math>
+    </content>
+    <terms>
+      <term id="gamma" title="Gamma Function (Γ)" description="The gamma function, denoted by the Greek letter Γ (gamma), extends the factorial function to real and complex numbers."/>
+      <term id="z" title="Complex Variable (z)" description="The input to the gamma function, which can be any complex number with positive real part."/>
+      <term id="equals" title="Equality (=)" description="Shows that Γ(z) equals the integral expression on the right."/>
+      <term id="integral" title="Definite Integral" description="An integral from 0 to infinity that defines the gamma function."/>
+      <term id="int-symbol" title="Integral Symbol (∫)" description="The symbol representing integration, a fundamental operation in calculus."/>
+      <term id="zero" title="Lower Limit (0)" description="The lower bound of integration, starting from zero."/>
+      <term id="infinity" title="Upper Limit (∞)" description="The upper bound of integration, extending to positive infinity."/>
+      <term id="t-power" title="Power Function t^(z-1)" description="The first part of the integrand, where t is raised to the power (z-1)."/>
+      <term id="t" title="Integration Variable (t)" description="The variable of integration, representing the dummy variable over which we integrate."/>
+      <term id="z-exp" title="Exponent z" description="The same complex variable z appearing in the exponent."/>
+      <term id="minus" title="Subtraction (−)" description="Subtracts 1 from z in the exponent, giving us z-1."/>
+      <term id="one" title="One (1)" description="The constant 1 being subtracted from z."/>
+      <term id="exponential" title="Exponential Function" description="The exponential function e^(-t), which ensures convergence of the integral."/>
+      <term id="e" title="Euler's Number (e)" description="The base of the natural logarithm, e ≈ 2.71828."/>
+      <term id="neg" title="Negative Sign (−)" description="Makes the exponent negative, ensuring the exponential function decays as t increases."/>
+      <term id="t-exp" title="Variable t (in exponent)" description="The integration variable t appearing in the exponential decay term."/>
+      <term id="dt" title="Differential (dt)" description="The differential element, indicating integration with respect to t."/>
+    </terms>
+  </equation>
+
+  <!-- Beta Function: B(x,y) = ∫₀¹ t^(x-1) (1-t)^(y-1) dt -->
+  <equation id="beta">
+    <title>Beta Function</title>
+    <subtitle>"The symmetric function connecting gamma functions"</subtitle>
+    <content>
+      <m:math>
+        <m:apply>
+          <m:eq/>
+          <m:apply>
+            <m:ci>B</m:ci>
+            <m:ci>x</m:ci>
+            <m:ci>y</m:ci>
+          </m:apply>
+          <m:apply>
+            <m:int/>
+            <m:bvar>
+              <m:ci>t</m:ci>
+            </m:bvar>
+            <m:lowlimit>
+              <m:cn>0</m:cn>
+            </m:lowlimit>
+            <m:uplimit>
+              <m:cn>1</m:cn>
+            </m:uplimit>
+            <m:apply>
+              <m:times/>
+              <m:apply>
+                <m:power/>
+                <m:ci>t</m:ci>
+                <m:apply>
+                  <m:minus/>
+                  <m:ci>x</m:ci>
+                  <m:cn>1</m:cn>
+                </m:apply>
+              </m:apply>
+              <m:apply>
+                <m:power/>
+                <m:apply>
+                  <m:minus/>
+                  <m:cn>1</m:cn>
+                  <m:ci>t</m:ci>
+                </m:apply>
+                <m:apply>
+                  <m:minus/>
+                  <m:ci>y</m:ci>
+                  <m:cn>1</m:cn>
+                </m:apply>
+              </m:apply>
+            </m:apply>
+          </m:apply>
+        </m:apply>
+      </m:math>
+    </content>
+    <terms>
+      <term id="beta" title="Beta Function (B)" description="The beta function, a special function that is closely related to the gamma function and appears in many areas of mathematics."/>
+      <term id="x" title="Parameter x" description="The first parameter of the beta function, typically a positive real number."/>
+      <term id="comma" title="Comma (,)" description="Separates the two parameters of the beta function."/>
+      <term id="y" title="Parameter y" description="The second parameter of the beta function, typically a positive real number."/>
+      <term id="equals" title="Equality (=)" description="Shows that B(x,y) equals the integral expression on the right."/>
+      <term id="integral" title="Definite Integral" description="An integral from 0 to 1 that defines the beta function."/>
+      <term id="int-symbol" title="Integral Symbol (∫)" description="The symbol representing integration."/>
+      <term id="zero" title="Lower Limit (0)" description="The lower bound of integration, starting from zero."/>
+      <term id="one" title="Upper Limit (1)" description="The upper bound of integration, ending at one."/>
+      <term id="t-power" title="Power Function t^(x-1)" description="The first part of the integrand, where t is raised to the power (x-1)."/>
+      <term id="t" title="Integration Variable (t)" description="The variable of integration, ranging from 0 to 1."/>
+      <term id="x-exp" title="Exponent x" description="The parameter x appearing in the exponent."/>
+      <term id="minus1" title="Subtraction (−)" description="Subtracts 1 from x in the first exponent."/>
+      <term id="one1" title="One (1)" description="The constant 1 being subtracted from x."/>
+      <term id="complement" title="Complement Term (1-t)^(y-1)" description="The second part of the integrand, representing the complement (1-t) raised to the power (y-1)."/>
+      <term id="lparen2" title="Left Parenthesis (" description="Opens the complement expression (1-t)."/>
+      <term id="one2" title="One (1)" description="The constant 1 in the complement term."/>
+      <term id="minus2" title="Subtraction (−)" description="Subtracts t from 1 to form the complement."/>
+      <term id="t2" title="Variable t" description="The integration variable t in the complement term."/>
+      <term id="rparen2" title="Right Parenthesis )" description="Closes the complement expression (1-t)."/>
+      <term id="y-exp" title="Exponent y" description="The parameter y appearing in the exponent of the complement term."/>
+      <term id="minus3" title="Subtraction (−)" description="Subtracts 1 from y in the second exponent."/>
+      <term id="one3" title="One (1)" description="The constant 1 being subtracted from y."/>
+      <term id="dt" title="Differential (dt)" description="The differential element, indicating integration with respect to t."/>
+    </terms>
+  </equation>
+
+  <!-- Einstein's Field Equations: G_μν + Λg_μν = (8πG/c⁴)T_μν -->
+  <equation id="einstein-tensor">
+    <title>Einstein's Field Equations (Tensor Form)</title>
+    <subtitle>"The geometric foundation of general relativity"</subtitle>
+    <content>
+      <m:math>
+        <m:apply>
+          <m:eq/>
+          <m:apply>
+            <m:plus/>
+            <m:apply>
+              <m:ci>G</m:ci>
+              <m:ci>μ</m:ci>
+              <m:ci>ν</m:ci>
+            </m:apply>
+            <m:apply>
+              <m:times/>
+              <m:ci>Λ</m:ci>
+              <m:apply>
+                <m:ci>g</m:ci>
+                <m:ci>μ</m:ci>
+                <m:ci>ν</m:ci>
+              </m:apply>
+            </m:apply>
+          </m:apply>
+          <m:apply>
+            <m:times/>
+            <m:apply>
+              <m:divide/>
+              <m:apply>
+                <m:times/>
+                <m:cn>8</m:cn>
+                <m:pi/>
+                <m:ci>G</m:ci>
+              </m:apply>
+              <m:apply>
+                <m:power/>
+                <m:ci>c</m:ci>
+                <m:cn>4</m:cn>
+              </m:apply>
+            </m:apply>
+            <m:apply>
+              <m:ci>T</m:ci>
+              <m:ci>μ</m:ci>
+              <m:ci>ν</m:ci>
+            </m:apply>
+          </m:apply>
+        </m:apply>
+      </m:math>
+    </content>
+    <terms>
+      <term id="einstein-tensor" title="Einstein Tensor (G_μν)" description="The Einstein tensor describes the curvature of spacetime. It's constructed from the Ricci tensor and scalar curvature, encoding how spacetime is curved."/>
+      <term id="G" title="Einstein Tensor Symbol (G)" description="The letter G represents the Einstein tensor, named after Albert Einstein."/>
+      <term id="mu" title="Index μ (mu)" description="The first spacetime index, which can take values 0, 1, 2, 3 corresponding to time and three spatial dimensions."/>
+      <term id="nu" title="Index ν (nu)" description="The second spacetime index, which can take values 0, 1, 2, 3 corresponding to time and three spatial dimensions."/>
+      <term id="plus" title="Addition (+)" description="Adds the cosmological term to the Einstein tensor."/>
+      <term id="lambda" title="Cosmological Constant (Λ)" description="The cosmological constant, representing the energy density of empty space. Einstein originally introduced it to allow for a static universe."/>
+      <term id="metric" title="Metric Tensor (g_μν)" description="The metric tensor describes the geometry of spacetime, determining distances and angles in curved spacetime."/>
+      <term id="g" title="Metric Symbol (g)" description="The letter g represents the metric tensor, which encodes the geometry of spacetime."/>
+      <term id="mu2" title="Index μ (mu)" description="The same spacetime index μ appearing in the metric tensor."/>
+      <term id="nu2" title="Index ν (nu)" description="The same spacetime index ν appearing in the metric tensor."/>
+      <term id="equals" title="Equality (=)" description="Shows that the left side (geometry) equals the right side (matter-energy content)."/>
+      <term id="coupling" title="Einstein's Gravitational Constant" description="This fraction represents Einstein's gravitational constant, relating the strength of gravity to the curvature of spacetime."/>
+      <term id="eight" title="Eight (8)" description="The numerical factor 8 in Einstein's gravitational constant."/>
+      <term id="pi" title="Pi (π)" description="The mathematical constant π appearing in the gravitational coupling constant."/>
+      <term id="G-const" title="Newton's Gravitational Constant (G)" description="Newton's gravitational constant, the fundamental constant that determines the strength of gravitational attraction."/>
+      <term id="c-power" title="Speed of Light to Fourth Power (c⁴)" description="The speed of light raised to the fourth power, appearing in the denominator of the coupling constant."/>
+      <term id="c" title="Speed of Light (c)" description="The speed of light in vacuum, a fundamental constant of nature."/>
+      <term id="four" title="Four (4)" description="The exponent 4, indicating that c is raised to the fourth power."/>
+      <term id="stress-energy" title="Stress-Energy Tensor (T_μν)" description="The stress-energy tensor describes the density and flux of energy and momentum in spacetime."/>
+      <term id="T" title="Stress-Energy Symbol (T)" description="The letter T represents the stress-energy tensor, describing matter and energy content."/>
+      <term id="mu3" title="Index μ (mu)" description="The same spacetime index μ appearing in the stress-energy tensor."/>
+      <term id="nu3" title="Index ν (nu)" description="The same spacetime index ν appearing in the stress-energy tensor."/>
+    </terms>
+  </equation>
+
+</equations>

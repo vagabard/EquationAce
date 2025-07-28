@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Nesting Colors Implementation</title>
+</head>
+<body>
+    <h1>Testing IBM Color Nesting Implementation</h1>
+    <p>This test will open the main index.html file and verify the nesting colors are applied correctly.</p>
+    
+    <div id="test-results">
+        <h2>Expected Nesting Levels:</h2>
+        <ul>
+            <li><strong>Level 0 (Blue):</strong> +, 1, =, 0 (basic terms at root level)</li>
+            <li><strong>Level 1 (Red):</strong> e, exponential container (one level deep)</li>
+            <li><strong>Level 2 (Green):</strong> i, π (nested inside exponential's superscript)</li>
+        </ul>
+        
+        <h2>IBM Carbon Colors Used:</h2>
+        <ul>
+            <li><strong>Level 0:</strong> Blue 60 (#0f62fe)</li>
+            <li><strong>Level 1:</strong> Red 50 (#fa4d56)</li>
+            <li><strong>Level 2:</strong> Green 50 (#24a148)</li>
+            <li><strong>Level 3:</strong> Purple 50 (#8a3ffc)</li>
+            <li><strong>Level 4:</strong> Teal 50 (#009d9a)</li>
+            <li><strong>Level 5:</strong> Orange 50 (#ff832b)</li>
+        </ul>
+    </div>
+    
+    <button onclick="openMainFile()">Open Main File for Testing</button>
+    <button onclick="runTests()">Run Automated Tests</button>
+    
+    <div id="test-output"></div>
+    
+    <script>
+        function openMainFile() {
+            window.open('../index.html', '_blank');
+        }
+        
+        function runTests() {
+            const output = document.getElementById('test-output');
+            output.innerHTML = '<h3>Test Results:</h3>';
+            
+            // Open the main file in a new window and test
+            const testWindow = window.open('../index.html', 'testWindow');
+            
+            setTimeout(() => {
+                try {
+                    const clickableElements = testWindow.document.querySelectorAll('.clickable-term');
+                    let results = '<ul>';
+                    
+                    clickableElements.forEach((element, index) => {
+                        const term = element.dataset.term;
+                        const classes = Array.from(element.classList);
+                        const nestingClass = classes.find(cls => cls.startsWith('nesting-level-'));
+                        
+                        results += `<li><strong>${term}</strong>: ${nestingClass || 'No nesting class found'} - Text: "${element.textContent}"</li>`;
+                    });
+                    
+                    results += '</ul>';
+                    output.innerHTML += results;
+                    
+                    // Test cycling logic
+                    output.innerHTML += '<h4>Cycling Test:</h4>';
+                    output.innerHTML += '<p>With 6 IBM colors, level 6 should cycle back to level 0 (Blue), level 7 to level 1 (Red), etc.</p>';
+                    
+                } catch (error) {
+                    output.innerHTML += '<p style="color: red;">Error accessing test window: ' + error.message + '</p>';
+                    output.innerHTML += '<p>Please manually verify the colors in the opened window.</p>';
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

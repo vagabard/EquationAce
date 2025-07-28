@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Functionality Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .pass {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Zoom Functionality Test</h1>
+    
+    <div class="test-container">
+        <h2>Test Results</h2>
+        <div id="test-results"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>Manual Test</h2>
+        <p>Open the main index.html file and verify:</p>
+        <ul>
+            <li>Zoom controls are visible above the equation</li>
+            <li>Clicking "+" increases equation size</li>
+            <li>Clicking "−" decreases equation size</li>
+            <li>Zoom level display updates correctly</li>
+            <li>Buttons are disabled at min/max zoom levels</li>
+            <li>Equation remains centered during zoom</li>
+        </ul>
+        <button onclick="window.open('index.html', '_blank')">Open Main Page</button>
+    </div>
+
+    <script>
+        function runTests() {
+            const results = [];
+            
+            // Test 1: Check if main HTML file exists and has zoom controls
+            fetch('index.html')
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    
+                    // Test zoom controls HTML elements
+                    const zoomControls = doc.querySelector('.zoom-controls');
+                    const zoomInBtn = doc.querySelector('#zoom-in');
+                    const zoomOutBtn = doc.querySelector('#zoom-out');
+                    const zoomLevel = doc.querySelector('#zoom-level');
+                    const equationContainer = doc.querySelector('#equation-container');
+                    
+                    addResult(zoomControls ? 'PASS' : 'FAIL', 
+                        'Zoom controls container exists', 
+                        zoomControls ? 'Found .zoom-controls element' : 'Missing .zoom-controls element');
+                    
+                    addResult(zoomInBtn ? 'PASS' : 'FAIL', 
+                        'Zoom in button exists', 
+                        zoomInBtn ? 'Found #zoom-in button' : 'Missing #zoom-in button');
+                    
+                    addResult(zoomOutBtn ? 'PASS' : 'FAIL', 
+                        'Zoom out button exists', 
+                        zoomOutBtn ? 'Found #zoom-out button' : 'Missing #zoom-out button');
+                    
+                    addResult(zoomLevel ? 'PASS' : 'FAIL', 
+                        'Zoom level display exists', 
+                        zoomLevel ? 'Found #zoom-level element' : 'Missing #zoom-level element');
+                    
+                    addResult(equationContainer ? 'PASS' : 'FAIL', 
+                        'Equation container exists', 
+                        equationContainer ? 'Found #equation-container element' : 'Missing #equation-container element');
+                    
+                    // Test JavaScript functions
+                    const hasZoomIn = html.includes('function zoomIn()');
+                    const hasZoomOut = html.includes('function zoomOut()');
+                    const hasUpdateZoomDisplay = html.includes('function updateZoomDisplay()');
+                    const hasApplyZoom = html.includes('function applyZoom()');
+                    
+                    addResult(hasZoomIn ? 'PASS' : 'FAIL', 
+                        'zoomIn function exists', 
+                        hasZoomIn ? 'Found zoomIn function' : 'Missing zoomIn function');
+                    
+                    addResult(hasZoomOut ? 'PASS' : 'FAIL', 
+                        'zoomOut function exists', 
+                        hasZoomOut ? 'Found zoomOut function' : 'Missing zoomOut function');
+                    
+                    addResult(hasUpdateZoomDisplay ? 'PASS' : 'FAIL', 
+                        'updateZoomDisplay function exists', 
+                        hasUpdateZoomDisplay ? 'Found updateZoomDisplay function' : 'Missing updateZoomDisplay function');
+                    
+                    addResult(hasApplyZoom ? 'PASS' : 'FAIL', 
+                        'applyZoom function exists', 
+                        hasApplyZoom ? 'Found applyZoom function' : 'Missing applyZoom function');
+                    
+                    // Test CSS styles
+                    const hasZoomControlsCSS = html.includes('.zoom-controls');
+                    const hasZoomButtonCSS = html.includes('.zoom-button');
+                    const hasEquationContainerCSS = html.includes('.equation-container');
+                    
+                    addResult(hasZoomControlsCSS ? 'PASS' : 'FAIL', 
+                        'Zoom controls CSS exists', 
+                        hasZoomControlsCSS ? 'Found .zoom-controls CSS' : 'Missing .zoom-controls CSS');
+                    
+                    addResult(hasZoomButtonCSS ? 'PASS' : 'FAIL', 
+                        'Zoom button CSS exists', 
+                        hasZoomButtonCSS ? 'Found .zoom-button CSS' : 'Missing .zoom-button CSS');
+                    
+                    addResult(hasEquationContainerCSS ? 'PASS' : 'FAIL', 
+                        'Equation container CSS exists', 
+                        hasEquationContainerCSS ? 'Found .equation-container CSS' : 'Missing .equation-container CSS');
+                    
+                    // Test zoom configuration
+                    const hasMinZoom = html.includes('minZoom = 0.5');
+                    const hasMaxZoom = html.includes('maxZoom = 3.0');
+                    const hasZoomStep = html.includes('zoomStep = 0.25');
+                    
+                    addResult(hasMinZoom ? 'PASS' : 'FAIL', 
+                        'Minimum zoom limit configured', 
+                        hasMinZoom ? 'Found minZoom = 0.5' : 'Missing or incorrect minZoom');
+                    
+                    addResult(hasMaxZoom ? 'PASS' : 'FAIL', 
+                        'Maximum zoom limit configured', 
+                        hasMaxZoom ? 'Found maxZoom = 3.0' : 'Missing or incorrect maxZoom');
+                    
+                    addResult(hasZoomStep ? 'PASS' : 'FAIL', 
+                        'Zoom step configured', 
+                        hasZoomStep ? 'Found zoomStep = 0.25' : 'Missing or incorrect zoomStep');
+                    
+                    addResult('INFO', 'Test Summary', 
+                        `Completed ${results.length} tests. Check manual test section for interactive verification.`);
+                })
+                .catch(error => {
+                    addResult('FAIL', 'File access error', `Could not read index.html: ${error.message}`);
+                });
+        }
+        
+        function addResult(status, test, details) {
+            const resultsDiv = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${status.toLowerCase()}`;
+            resultDiv.innerHTML = `<strong>${status}:</strong> ${test}<br><small>${details}</small>`;
+            resultsDiv.appendChild(resultDiv);
+        }
+        
+        // Run tests when page loads
+        document.addEventListener('DOMContentLoaded', runTests);
+    </script>
+</body>
+</html>

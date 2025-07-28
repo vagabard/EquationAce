@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EquationAce - Mathematical Expression Editor</title>
+    <!-- MathJax doesn't require separate CSS - it's included in the JS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EquationAce</h1>
+            <div class="preset-equations">
+                <label for="preset-select">Pre-entered equations:</label>
+                <select id="preset-select">
+                    <option value="">Select an equation...</option>
+                    <option value="e^{i\\pi} = -1">e = iπ</option>
+                    <option value="\\sin^2(x) + \\cos^2(x) = 1">sin²x + cos²x = 1</option>
+                </select>
+            </div>
+        </header>
+
+        <main>
+            <div class="equation-editor">
+                <!-- Primary Equation Display -->
+                <div class="primary-display-section">
+                    <h2>Mathematical Expression</h2>
+                    <div class="math-display primary" id="math-display">
+                        <div class="rendered-math" id="rendered-math"></div>
+                        <div class="display-hint">Click on individual terms to select them as toggle buttons. Functions automatically select their arguments.</div>
+                    </div>
+                </div>
+
+                <!-- Secondary Expression Input (shows selected term only) -->
+                <div class="selected-term-section">
+                    <label for="expression-input">Selected Term Expression:</label>
+                    <input type="text" id="expression-input" placeholder="No term selected..." readonly />
+                    <button id="edit-term-btn" disabled>Edit Term</button>
+                </div>
+
+                <div class="selection-info" id="selection-info">
+                    <span>Selected: <span id="selected-expression">None</span></span>
+                    <button id="get-transformations" disabled>Get Transformations</button>
+                </div>
+
+                <div class="transformations" id="transformations-panel" style="display: none;">
+                    <h3>Available Transformations:</h3>
+                    <div id="transformations-list"></div>
+                </div>
+            </div>
+
+            <!-- Term Editor Modal -->
+            <div class="term-editor-modal" id="term-editor-modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Edit Term</h3>
+                        <button class="close-btn" id="close-term-editor">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="term-preview">
+                            <label>Preview:</label>
+                            <div class="term-preview-display" id="term-preview-display"></div>
+                        </div>
+                        <div class="term-input-section">
+                            <label for="term-editor-input">Edit Expression:</label>
+                            <textarea id="term-editor-input" rows="3" placeholder="Enter expression for this term..."></textarea>
+                        </div>
+                        <div class="function-args" id="function-args" style="display: none;">
+                            <label>Function Arguments:</label>
+                            <div class="args-container" id="args-container"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="cancel-term-edit" class="btn-cancel">Cancel</button>
+                        <button id="apply-term-edit" class="btn-apply">OK</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="virtual-keyboard" id="virtual-keyboard">
+                <h3>Mathematical Symbols</h3>
+                <div class="keyboard-section">
+                    <h4>Basic Operations</h4>
+                    <div class="key-row">
+                        <button class="key" data-expression="+">+</button>
+                        <button class="key" data-expression="-">-</button>
+                        <button class="key" data-expression="\\times">×</button>
+                        <button class="key" data-expression="\\div">÷</button>
+                        <button class="key" data-expression="=">=</button>
+                        <button class="key" data-expression="\\neq">≠</button>
+                    </div>
+                </div>
+
+                <div class="keyboard-section">
+                    <h4>Powers & Roots</h4>
+                    <div class="key-row">
+                        <button class="key" data-expression="^{}"  data-cursor-pos="2">x^n</button>
+                        <button class="key" data-expression="_{}" data-cursor-pos="2">x_n</button>
+                        <button class="key" data-expression="\\sqrt{}" data-cursor-pos="6">√</button>
+                        <button class="key" data-expression="\\sqrt[{}]{}" data-cursor-pos="7">ⁿ√</button>
+                    </div>
+                </div>
+
+                <div class="keyboard-section">
+                    <h4>Fractions & Functions</h4>
+                    <div class="key-row">
+                        <button class="key" data-expression="\\frac{}{}" data-cursor-pos="6">a/b</button>
+                        <button class="key" data-expression="\\sin{}" data-cursor-pos="5">sin</button>
+                        <button class="key" data-expression="\\cos{}" data-cursor-pos="5">cos</button>
+                        <button class="key" data-expression="\\tan{}" data-cursor-pos="5">tan</button>
+                        <button class="key" data-expression="\\log{}" data-cursor-pos="5">log</button>
+                        <button class="key" data-expression="\\ln{}" data-cursor-pos="4">ln</button>
+                    </div>
+                </div>
+
+                <div class="keyboard-section">
+                    <h4>Greek Letters</h4>
+                    <div class="key-row">
+                        <button class="key" data-expression="\\alpha">α</button>
+                        <button class="key" data-expression="\\beta">β</button>
+                        <button class="key" data-expression="\\gamma">γ</button>
+                        <button class="key" data-expression="\\delta">δ</button>
+                        <button class="key" data-expression="\\pi">π</button>
+                        <button class="key" data-expression="\\theta">θ</button>
+                        <button class="key" data-expression="\\lambda">λ</button>
+                        <button class="key" data-expression="\\mu">μ</button>
+                    </div>
+                </div>
+
+                <div class="keyboard-section">
+                    <h4>Special Symbols</h4>
+                    <div class="key-row">
+                        <button class="key" data-expression="\\infty">∞</button>
+                        <button class="key" data-expression="\\sum_{}{}" data-cursor-pos="5">Σ</button>
+                        <button class="key" data-expression="\\int_{}{}" data-cursor-pos="5">∫</button>
+                        <button class="key" data-expression="\\lim_{}" data-cursor-pos="5">lim</button>
+                        <button class="key" data-expression="\\partial">∂</button>
+                        <button class="key" data-expression="\\nabla">∇</button>
+                    </div>
+                </div>
+
+                <div class="keyboard-section">
+                    <h4>Parentheses & Brackets</h4>
+                    <div class="key-row">
+                        <button class="key" data-expression="(">(</button>
+                        <button class="key" data-expression=")">)</button>
+                        <button class="key" data-expression="[">[</button>
+                        <button class="key" data-expression="]">]</button>
+                        <button class="key" data-expression="\\{">{ }</button>
+                        <button class="key" data-expression="\\left(\\right)" data-cursor-pos="6">( )</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="dist/index.js"></script>
+</body>
+</html>

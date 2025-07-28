@@ -1,0 +1,506 @@
+﻿        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Fix MathJax element styling that was affected by the universal reset */
+        math, math * {
+            box-sizing: content-box !important;
+        }
+
+        /* Ensure proper superscript positioning */
+        msup {
+            display: inline-block !important;
+            vertical-align: baseline !important;
+        }
+
+        msup > *:nth-child(2) {
+            font-size: 0.5em !important;
+            vertical-align: super !important;
+            margin-left: 0.1em !important;
+        }
+
+        /* Ensure proper square root display */
+        msqrt {
+            display: inline-block !important;
+            position: relative !important;
+            padding-top: 0.1em !important;
+            border-top: 1px solid currentColor !important;
+        }
+
+        msqrt:before {
+            content: "√" !important;
+            position: absolute !important;
+            left: -0.5em !important;
+            top: -0.1em !important;
+            font-size: 1.2em !important;
+        }
+
+        /* Ensure proper fraction display */
+        mfrac {
+            display: inline-block !important;
+            vertical-align: middle !important;
+            text-align: center !important;
+        }
+
+        mfrac > *:nth-child(1) {
+            display: block !important;
+            border-bottom: 1px solid currentColor !important;
+            padding-bottom: 0.1em !important;
+            margin-bottom: 0.1em !important;
+        }
+
+        mfrac > *:nth-child(2) {
+            display: block !important;
+            padding-top: 0.1em !important;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background: white;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        .euler-identity {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .explanation {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .explanation h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .explanation p {
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .mathml-display {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px dashed #667eea;
+        }
+
+        .mathml-display h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .equation-selector {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .equation-selector label {
+            display: block;
+            margin-bottom: 10px;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .equation-selector select {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 1em;
+            color: #333;
+            cursor: pointer;
+            min-width: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .equation-selector select:hover {
+            border-color: #5a6fd8;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .equation-selector select:focus {
+            outline: none;
+            border-color: #5a6fd8;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .click-info {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #1565c0;
+            font-size: 0.9em;
+        }
+
+        .term-details {
+            display: none;
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .term-details.show {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reset-button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .reset-button:hover {
+            background: #5a6268;
+        }
+
+        /* Zoom controls styling */
+        .zoom-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .zoom-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zoom-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        }
+
+        .zoom-button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .zoom-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .zoom-level {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-weight: bold;
+            color: #667eea;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Equation container for zoom scaling */
+        .equation-container {
+            transition: transform 0.3s ease;
+            transform-origin: center;
+        }
+
+        /* IBM Carbon Design System Colors for Nesting Levels */
+        /* Level 0 - Blue 60 */
+        .clickable-term.nesting-level-0,
+        math .clickable-term.nesting-level-0,
+        .euler-identity .clickable-term.nesting-level-0 {
+            cursor: pointer !important;
+            padding: 8px 12px !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
+            background: #0f62fe !important;
+            color: white !important;
+            margin: 2px !important;
+            display: inline-block !important;
+            box-shadow: 0 3px 10px rgba(15, 98, 254, 0.3) !important;
+        }
+
+        .clickable-term.nesting-level-0:hover,
+        math .clickable-term.nesting-level-0:hover,
+        .euler-identity .clickable-term.nesting-level-0:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(15, 98, 254, 0.4) !important;
+            background: #0353e9 !important;
+        }
+
+        /* Level 1 - Red 50 */
+        .clickable-term.nesting-level-1,
+        math .clickable-term.nesting-level-1,
+        .euler-identity .clickable-term.nesting-level-1 {
+            cursor: pointer !important;
+            padding: 8px 12px !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
+            background: #fa4d56 !important;
+            color: white !important;
+            margin: 2px !important;
+            display: inline-block !important;
+            box-shadow: 0 3px 10px rgba(250, 77, 86, 0.3) !important;
+        }
+
+        .clickable-term.nesting-level-1:hover,
+        math .clickable-term.nesting-level-1:hover,
+        .euler-identity .clickable-term.nesting-level-1:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(250, 77, 86, 0.4) !important;
+            background: #ee0713 !important;
+        }
+
+        /* Level 2 - Green 50 */
+        .clickable-term.nesting-level-2,
+        math .clickable-term.nesting-level-2,
+        .euler-identity .clickable-term.nesting-level-2 {
+            cursor: pointer !important;
+            padding: 8px 12px !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
+            background: #24a148 !important;
+            color: white !important;
+            margin: 2px !important;
+            display: inline-block !important;
+            box-shadow: 0 3px 10px rgba(36, 161, 72, 0.3) !important;
+        }
+
+        .clickable-term.nesting-level-2:hover,
+        math .clickable-term.nesting-level-2:hover,
+        .euler-identity .clickable-term.nesting-level-2:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(36, 161, 72, 0.4) !important;
+            background: #198038 !important;
+        }
+
+        /* Level 3 - Purple 50 */
+        .clickable-term.nesting-level-3,
+        math .clickable-term.nesting-level-3,
+        .euler-identity .clickable-term.nesting-level-3 {
+            cursor: pointer !important;
+            padding: 8px 12px !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
+            background: #8a3ffc !important;
+            color: white !important;
+            margin: 2px !important;
+            display: inline-block !important;
+            box-shadow: 0 3px 10px rgba(138, 63, 252, 0.3) !important;
+        }
+
+        .clickable-term.nesting-level-3:hover,
+        math .clickable-term.nesting-level-3:hover,
+        .euler-identity .clickable-term.nesting-level-3:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(138, 63, 252, 0.4) !important;
+            background: #7c3dd0 !important;
+        }
+
+        /* Level 4 - Teal 50 */
+        .clickable-term.nesting-level-4,
+        math .clickable-term.nesting-level-4,
+        .euler-identity .clickable-term.nesting-level-4 {
+            cursor: pointer !important;
+            padding: 8px 12px !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
+            background: #009d9a !important;
+            color: white !important;
+            margin: 2px !important;
+            display: inline-block !important;
+            box-shadow: 0 3px 10px rgba(0, 157, 154, 0.3) !important;
+        }
+
+        .clickable-term.nesting-level-4:hover,
+        math .clickable-term.nesting-level-4:hover,
+        .euler-identity .clickable-term.nesting-level-4:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(0, 157, 154, 0.4) !important;
+            background: #007d79 !important;
+        }
+
+        /* Level 5 - Orange 50 */
+        .clickable-term.nesting-level-5,
+        math .clickable-term.nesting-level-5,
+        .euler-identity .clickable-term.nesting-level-5 {
+            cursor: pointer !important;
+            padding: 8px 12px !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
+            background: #ff832b !important;
+            color: white !important;
+            margin: 2px !important;
+            display: inline-block !important;
+            box-shadow: 0 3px 10px rgba(255, 131, 43, 0.3) !important;
+        }
+
+        .clickable-term.nesting-level-5:hover,
+        math .clickable-term.nesting-level-5:hover,
+        .euler-identity .clickable-term.nesting-level-5:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(255, 131, 43, 0.4) !important;
+            background: #ff6f00 !important;
+        }
+
+        /* Common styles for all nesting levels */
+        .clickable-term {
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            color: white !important;
+            background: #667eea !important; /* Default background color for visibility */
+            margin: 2px;
+            display: inline-block;
+        }
+
+        .clickable-term:active {
+            transform: translateY(-1px);
+        }
+
+        .clickable-term.clicked {
+            background: #28a745 !important;
+            animation: pulse 0.6s ease-in-out;
+        }
+
+        /* Special styling for the exponential term container */
+        #term-exponential {
+            background: transparent !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        #term-exponential:hover {
+            background: transparent !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Box styling for i π grouping */
+        .superscript-box {
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 4px 6px;
+            margin: 2px;
+            background: rgba(102, 126, 234, 0.1);
+            display: inline-block;
+        }
+
+        @media (max-width: 600px) {
+            .euler-identity {
+                gap: 10px;
+            }
+
+            .euler-identity math {
+                font-size: 2em !important;
+            }
+
+            .clickable-term {
+                padding: 6px 10px;
+                font-size: 0.9em;
+            }
+
+            .superscript-box {
+                border-width: 1px;
+                padding: 2px 4px;
+                border-radius: 6px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            /* Mobile-friendly zoom controls */
+            .zoom-controls {
+                gap: 10px;
+                margin: 15px 0;
+            }
+
+            .zoom-button {
+                width: 40px;
+                height: 40px;
+                font-size: 1.3em;
+            }
+
+            .zoom-level {
+                min-width: 70px;
+                padding: 6px 12px;
+                font-size: 0.9em;
+            }
+        }

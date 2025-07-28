@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Euler's Identity - Interactive Display</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+	<h1 id="equation-title">Loading...</h1>
+	<p class="subtitle" id="equation-subtitle">Please wait while equations load</p>
+
+	<!-- Equation Selection Dropdown -->
+	<div class="equation-selector">
+		<label for="equation-select">Choose an equation:</label>
+		<select id="equation-select" onchange="switchEquation()">
+			<option value="">-- Loading equations --</option>
+		</select>
+	</div>
+
+	<div class="click-info">
+		Click on each term of the equation to learn more about it!
+	</div>
+
+	<!-- Zoom Controls -->
+	<div class="zoom-controls">
+		<button class="zoom-button" id="zoom-out" onclick="zoomOut()" title="Zoom Out">−</button>
+		<div class="zoom-level" id="zoom-level">100%</div>
+		<button class="zoom-button" id="zoom-in" onclick="zoomIn()" title="Zoom In">+</button>
+	</div>
+
+	<!-- Interactive MathML Display -->
+	<div class="equation-container" id="equation-container">
+		<div class="euler-identity">
+			<p style="text-align: center; color: #666; font-style: italic;">Loading equation...</p>
+		</div>
+	</div>
+
+	<div class="term-details" id="term-details">
+		<h4 id="term-title"></h4>
+		<p id="term-description"></p>
+	</div>
+
+	<div class="explanation" id="explanation-section">
+		<h3 id="explanation-title">About Euler's Identity</h3>
+		<p id="explanation-content">
+			Euler's identity is often cited as an example of mathematical beauty. It elegantly combines five of the most important mathematical constants:
+			<strong>e</strong> (Euler's number), <strong>i</strong> (the imaginary unit), <strong>π</strong> (pi), <strong>1</strong>, and <strong>0</strong>,
+			along with the three basic arithmetic operations: addition, multiplication, and exponentiation.
+		</p>
+	</div>
+
+	<button class="reset-button" onclick="resetTerms()">Reset All Terms</button>
+
+	<!-- New area for MathML Content to Presentation conversion -->
+	<div class="mathml-content-area" style="margin-top: 40px; padding: 30px; background: #f0f8ff; border-radius: 15px; border: 2px solid #667eea;">
+		<h2 style="color: #667eea; text-align: center; margin-bottom: 20px;">MathML Content to Presentation Converter</h2>
+		<p style="text-align: center; color: #666; margin-bottom: 20px;">
+			This area demonstrates conversion from MathML Content format (from equations-content.xml) to MathML Presentation format.
+		</p>
+
+		<!-- Equation selector for content conversion -->
+		<div class="equation-selector" style="margin-bottom: 20px;">
+			<label for="content-equation-select" style="display: block; margin-bottom: 10px; color: #667eea; font-weight: bold;">
+				Select equation from equations-content.xml:
+			</label>
+			<select id="content-equation-select" onchange="loadContentEquation()" style="padding: 8px; border-radius: 5px; border: 2px solid #667eea; font-size: 1em;">
+				<option value="">-- Select an equation --</option>
+			</select>
+		</div>
+
+		<!-- Display area for converted equation -->
+		<div id="content-equation-display" style="text-align: center; min-height: 100px; padding: 20px; background: white; border-radius: 10px; border: 1px solid #ddd;">
+			<p style="color: #999;">Select an equation to see the MathML content converted to presentation format.</p>
+		</div>
+
+		<!-- Equation info display -->
+		<div id="content-equation-info" style="margin-top: 20px; padding: 15px; background: white; border-radius: 10px; border: 1px solid #ddd; display: none;">
+			<h3 id="content-equation-title" style="color: #667eea; margin-bottom: 10px;"></h3>
+			<p id="content-equation-subtitle" style="font-style: italic; color: #666; margin-bottom: 15px;"></p>
+		</div>
+	</div>
+</div>
+
+<!-- MathJax Configuration -->
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            processEnvironments: true
+        },
+        mml: {
+            // Configure MathML processing to preserve attributes
+            forceReparse: true
+        },
+        chtml: {
+            // Preserve classes and data attributes in CHTML output
+            adaptiveCSS: false,
+            matchFontHeight: false
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            // Skip processing elements with clickable-term class to preserve our custom attributes
+            ignoreHtmlClass: 'clickable-term'
+        }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<script src="script.js"></script>
+</body>
+</html>

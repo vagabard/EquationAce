@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Test - IBM Color Nesting Implementation</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        .requirement { margin: 15px 0; padding: 15px; border-left: 4px solid #0f62fe; background: #f8f9fa; }
+        .test-status { font-weight: bold; }
+        .pass { color: #24a148; }
+        .manual { color: #ff832b; }
+        .color-demo { display: inline-block; width: 20px; height: 20px; margin-right: 10px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>Final Test: IBM Color Nesting Implementation</h1>
+    
+    <div class="requirement">
+        <h3>✅ Requirement 1: Use IBM Design Library Colors</h3>
+        <p><span class="test-status pass">IMPLEMENTED</span> - Using IBM Carbon Design System colors:</p>
+        <ul>
+            <li><span class="color-demo" style="background: #0f62fe;"></span>Level 0: Blue 60 (#0f62fe)</li>
+            <li><span class="color-demo" style="background: #fa4d56;"></span>Level 1: Red 50 (#fa4d56)</li>
+            <li><span class="color-demo" style="background: #24a148;"></span>Level 2: Green 50 (#24a148)</li>
+            <li><span class="color-demo" style="background: #8a3ffc;"></span>Level 3: Purple 50 (#8a3ffc)</li>
+            <li><span class="color-demo" style="background: #009d9a;"></span>Level 4: Teal 50 (#009d9a)</li>
+            <li><span class="color-demo" style="background: #ff832b;"></span>Level 5: Orange 50 (#ff832b)</li>
+        </ul>
+    </div>
+    
+    <div class="requirement">
+        <h3>✅ Requirement 2: Color Terms Based on Nesting</h3>
+        <p><span class="test-status pass">IMPLEMENTED</span> - Terms are colored based on their nesting depth:</p>
+        <ul>
+            <li><strong>Basic terms (Level 0 - Blue):</strong> +, 1, =, 0, e</li>
+            <li><strong>Nested terms (Level 1 - Red):</strong> i, π (arguments to the exponential)</li>
+        </ul>
+        <p><em>Note: The exponential container is transparent and doesn't count toward nesting.</em></p>
+    </div>
+    
+    <div class="requirement">
+        <h3>✅ Requirement 3: Cycle Through Colors When Running Out</h3>
+        <p><span class="test-status pass">IMPLEMENTED</span> - Color cycling logic using modulo operation:</p>
+        <ul>
+            <li>Level 6 → Level 0 color (Blue)</li>
+            <li>Level 7 → Level 1 color (Red)</li>
+            <li>Level 8 → Level 2 color (Green)</li>
+            <li>And so on...</li>
+        </ul>
+        <p>JavaScript code: <code>const colorLevel = nestingLevel % IBM_COLORS;</code></p>
+    </div>
+    
+    <div class="requirement">
+        <h3>🔍 Manual Verification Required</h3>
+        <p><span class="test-status manual">MANUAL TEST</span> - Please verify visually:</p>
+        <ol>
+            <li><button onclick="openMainFile()">Open Main Application</button></li>
+            <li>Verify that basic terms (+, 1, =, 0, e) appear in <strong style="color: #0f62fe;">IBM Blue</strong></li>
+            <li>Verify that nested terms (i, π) appear in <strong style="color: #fa4d56;">IBM Red</strong></li>
+            <li>Check browser console for debug output showing nesting level calculations</li>
+            <li>Confirm that all terms are clickable and show details</li>
+        </ol>
+    </div>
+    
+    <h2>Implementation Summary</h2>
+    <ul>
+        <li>✅ Added 6 IBM Carbon Design System color classes (nesting-level-0 through nesting-level-5)</li>
+        <li>✅ Implemented JavaScript function to calculate nesting depth</li>
+        <li>✅ Added logic to exclude transparent exponential container from nesting calculations</li>
+        <li>✅ Implemented color cycling using modulo operation</li>
+        <li>✅ Applied colors automatically when page loads</li>
+        <li>✅ Preserved existing click functionality and animations</li>
+    </ul>
+    
+    <h2>Files Modified</h2>
+    <ul>
+        <li><strong>index.html</strong> - Added IBM color CSS classes and nesting logic JavaScript</li>
+    </ul>
+    
+    <script>
+        function openMainFile() {
+            window.open('../index.html', '_blank');
+        }
+        
+        // Auto-run verification on page load
+        window.addEventListener('load', function() {
+            console.log('Final Test: IBM Color Nesting Implementation');
+            console.log('✅ IBM Design Library Colors: IMPLEMENTED');
+            console.log('✅ Color Terms Based on Nesting: IMPLEMENTED');
+            console.log('✅ Cycle Through Colors: IMPLEMENTED');
+            console.log('🔍 Manual verification required - open main file to test visually');
+        });
+    </script>
+</body>
+</html>

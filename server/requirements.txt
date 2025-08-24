@@ -1,0 +1,13 @@
+# Production dependencies
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+sympy>=1.12
+lxml>=4.9.0
+pydantic>=2.5.0
+
+# Development dependencies
+mypy>=1.7.0
+ruff>=0.1.6
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+httpx>=0.25.0

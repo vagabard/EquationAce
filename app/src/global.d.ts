@@ -9,18 +9,18 @@ declare global {
 
   namespace JSX {
     interface IntrinsicElements {
-      // MathML elements
-      Math: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+      // MathML elements (lowercase tag names to match JSX usage)
+      math: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
         xmlns?: string;
         display?: 'block' | 'inline';
       };
-      Mrow: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-      Mi: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-      Mo: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-      Mn: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-      Mfrac: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-      Msqrt: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-      Msup: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      mrow: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      mi: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      mo: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      mn: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      mfrac: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      msqrt: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      msup: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
     }
   }
 }

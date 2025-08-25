@@ -18,7 +18,7 @@ export type ParseError = {
 
 export type ParseResult = ParseSuccess | ParseError;
 
-// Tokenizer for a tiny subset: identifiers (letters), numbers, ^, (, ), '+', '-', '*', relational (=, <, >, <=, >=), and function names like sin, cos
+// Tokenizer for a tiny subset: identifiers (letters), numbers, ^, (, ), '+', '-', '*', '/', relational (=, <, >, <=, >=), and function names like sin, cos
 function tokenize(input: string) {
   const tokens: { type: string; value: string; index: number }[] = [];
   let i = 0;
@@ -28,7 +28,7 @@ function tokenize(input: string) {
       i++;
       continue;
     }
-    if (c === '^' || c === '(' || c === ')' || c === '+' || c === '-' || c === '*') {
+    if (c === '^' || c === '(' || c === ')' || c === '+' || c === '-' || c === '*' || c === '/') {
       tokens.push({ type: c, value: c, index: i });
       i++;
       continue;
@@ -84,7 +84,8 @@ type AST =
   | { kind: 'add'; terms: AST[]; id?: string }
   | { kind: 'mul'; factors: AST[]; id?: string }
   | { kind: 'call'; func: string; arg: AST; id?: string }
-  | { kind: 'rel'; op: 'eq' | 'lt' | 'le' | 'gt' | 'ge'; left: AST; right: AST; id?: string };
+  | { kind: 'rel'; op: 'eq' | 'lt' | 'le' | 'gt' | 'ge'; left: AST; right: AST; id?: string }
+  | { kind: 'diff'; var: AST; arg: AST; id?: string };
 
 function parse(input: string): { ast?: AST; error?: ParseError['error'] } {
   const tokens = tokenize(input);
@@ -181,6 +182,37 @@ function parse(input: string): { ast?: AST; error?: ParseError['error'] } {
   function parsePrimary(): AST | undefined {
     const t = peek();
     if (!t) return undefined;
+
+    // Derivative pattern: d/dx <expr> or d/dx(<expr>)
+    if (t.type === 'IDENT' && t.value.toLowerCase() === 'd') {
+      const t1 = tokens[pos + 1];
+      const t2 = tokens[pos + 2];
+      if (t1 && t1.type === '/' && t2 && t2.type === 'IDENT') {
+        const word = t2.value;
+        if (word.length >= 2 && word[0].toLowerCase() === 'd') {
+          const varName = word.slice(1); // e.g., 'dx' -> 'x'
+          if (varName && /^[a-zA-Z]+$/.test(varName)) {
+            // consume 'd' '/' 'd<var>'
+            consume('IDENT');
+            consume('/');
+            consume('IDENT');
+            // parse argument: either parenthesized Expr or a Power (to include x^2)
+            let arg: AST | undefined;
+            if (peek() && peek().type === '(') {
+              consume('(');
+              arg = parseExpr();
+              if (!arg) return undefined;
+              if (!consume(')')) return undefined;
+            } else {
+              arg = parsePower();
+              if (!arg) return undefined;
+            }
+            return { kind: 'diff', var: { kind: 'ident', name: varName }, arg };
+          }
+        }
+      }
+    }
+
     if (t.type === 'IDENT') {
       // function call or variable
       // lookahead for '('
@@ -261,6 +293,8 @@ function canonical(ast: AST): string {
       return `call:${ast.func}(${canonical(ast.arg)})`;
     case 'rel':
       return `rel:${ast.op}(${canonical(ast.left)},${canonical(ast.right)})`;
+    case 'diff':
+      return `diff(${canonical(ast.var)},${canonical(ast.arg)})`;
   }
 }
 
@@ -301,6 +335,12 @@ function withStableIds(ast: AST): AST {
       const id = hashString(`rel:${ast.op}(${canonical(left)},${canonical(right)})`);
       return { ...ast, left, right, id };
     }
+    case 'diff': {
+      const v = withStableIds(ast.var);
+      const arg = withStableIds(ast.arg);
+      const id = hashString(`diff(${canonical(v)},${canonical(arg)})`);
+      return { ...ast, var: v, arg, id };
+    }
   }
 }
 
@@ -328,6 +368,12 @@ function toContentMathML(ast: AST): string {
     case 'rel': {
       const tag = ast.op === 'eq' ? 'eq' : ast.op === 'lt' ? 'lt' : ast.op === 'le' ? 'leq' : ast.op === 'gt' ? 'gt' : 'geq';
       return `<apply><${tag}/> ${toContentMathML(ast.left)}${toContentMathML(ast.right)}</apply>`;
+    }
+    case 'diff': {
+      // Emit variable first for stability: <apply><diff/><ci>var</ci><expr/></apply>
+      const v = ast.var.kind === 'ident' ? `<ci>${escapeXml((ast.var as any).name)}</ci>` : toContentMathML(ast.var);
+      const a = toContentMathML(ast.arg);
+      return `<apply><diff/>${v}${a}</apply>`;
     }
   }
 }
@@ -402,6 +448,12 @@ function toPresentationMathML(ast: AST): string {
         const id = n.id || '';
         const sym = n.op === 'eq' ? '=' : n.op === 'lt' ? '&lt;' : n.op === 'le' ? '≤' : n.op === 'gt' ? '&gt;' : '≥';
         return `<mrow data-node-id="${id}">${pres(n.left)}<mo>${sym}</mo>${pres(n.right)}</mrow>`;
+      }
+      case 'diff': {
+        const id = n.id || '';
+        // Presentation form: (d)/(dx) ( arg ) for clarity
+        const v = n.var.kind === 'ident' ? (n.var as any).name : 'x';
+        return `<mrow data-node-id="${id}"><mfrac><mi>d</mi><mrow><mi>d</mi><mi>${escapeXml(v)}</mi></mrow></mfrac><mo>\u00A0</mo><mo>(</mo>${pres(n.arg)}<mo>)</mo></mrow>`;
       }
     }
   }

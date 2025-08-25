@@ -8,7 +8,8 @@ export type ASTNode =
   | { kind: 'add'; terms: ASTNode[]; id?: string }
   | { kind: 'mul'; factors: ASTNode[]; id?: string }
   | { kind: 'call'; func: string; arg: ASTNode; id?: string }
-  | { kind: 'rel'; op: 'eq' | 'lt' | 'le' | 'gt' | 'ge'; left: ASTNode; right: ASTNode; id?: string };
+  | { kind: 'rel'; op: 'eq' | 'lt' | 'le' | 'gt' | 'ge'; left: ASTNode; right: ASTNode; id?: string }
+  | { kind: 'diff'; var: ASTNode; arg: ASTNode; id?: string };
 
 // djb2 hash to hex, matching server/client logic
 function djb2Hex(s: string): string {
@@ -36,6 +37,8 @@ function canonical(ast: ASTNode): string {
       return `call:${ast.func}(${canonical(ast.arg)})`;
     case 'rel':
       return `rel:${ast.op}(${canonical(ast.left)},${canonical(ast.right)})`;
+    case 'diff':
+      return `diff(${canonical(ast.var)},${canonical(ast.arg)})`;
   }
 }
 
@@ -75,6 +78,12 @@ export function withIds(ast: ASTNode): ASTNode {
       const right = withIds(ast.right);
       const id = djb2Hex(canonical({ ...ast, left, right }));
       return { ...ast, left, right, id };
+    }
+    case 'diff': {
+      const v = withIds(ast.var);
+      const a = withIds(ast.arg);
+      const id = djb2Hex(canonical({ ...ast, var: v, arg: a } as any));
+      return { ...(ast as any), var: v, arg: a, id } as any;
     }
   }
 }
@@ -134,6 +143,15 @@ export function parseContentMathMLToAst(content: string): ASTNode {
       if (htag.endsWith('times')) return { kind: 'mul', factors: args };
       if (htag.endsWith('sin') && args.length === 1) return { kind: 'call', func: 'sin', arg: args[0] };
       if (htag.endsWith('cos') && args.length === 1) return { kind: 'call', func: 'cos', arg: args[0] };
+      if (htag.endsWith('diff')) {
+        if (args.length === 2) {
+          const a0 = args[0];
+          const a1 = args[1];
+          if (a0.kind === 'ident') return { kind: 'diff', var: a0, arg: a1 } as any;
+          if (a1.kind === 'ident') return { kind: 'diff', var: a1, arg: a0 } as any;
+        }
+        throw new Error('Unsupported operator: diff form');
+      }
       if ((htag.endsWith('eq') || htag.endsWith('lt') || htag.endsWith('leq') || htag.endsWith('gt') || htag.endsWith('geq')) && args.length === 2) {
         const map: Record<string, 'eq'|'lt'|'le'|'gt'|'ge'> = { eq: 'eq', lt: 'lt', leq: 'le', gt: 'gt', geq: 'ge' };
         const key = htag.split(':').pop()!; // handle ns
@@ -184,6 +202,11 @@ export function astToContentMathML(ast: ASTNode): string {
       case 'rel': {
         const tag = n.op === 'eq' ? 'eq' : n.op === 'lt' ? 'lt' : n.op === 'le' ? 'leq' : n.op === 'gt' ? 'gt' : 'geq';
         return `<apply><${tag}/> ${core(n.left)}${core(n.right)}</apply>`;
+      }
+      case 'diff': {
+        const v = n.var.kind === 'ident' ? `<ci>${escapeXml((n.var as any).name)}</ci>` : core(n.var);
+        const a = core(n.arg);
+        return `<apply><diff/>${v}${a}</apply>`;
       }
     }
   }
@@ -267,6 +290,11 @@ export function astToPresentationMathML(ast: ASTNode): string {
         const sym = n.op === 'eq' ? '=' : n.op === 'lt' ? '&lt;' : n.op === 'le' ? '≤' : n.op === 'gt' ? '&gt;' : '≥';
         return `<mrow data-node-id="${id}">${pres(n.left)}<mo>${sym}</mo>${pres(n.right)}</mrow>`;
       }
+      case 'diff': {
+        const id = (n as any).id || '';
+        const v = n.var.kind === 'ident' ? (n.var as any).name : 'x';
+        return `<mrow data-node-id="${id}"><mfrac><mi>d</mi><mrow><mi>d</mi><mi>${escapeXml(v)}</mi></mrow></mfrac><mo>\u00A0</mo><mo>(</mo>${pres(n.arg)}<mo>)</mo></mrow>`;
+      }
     }
   }
   const inner = pres(ast);
@@ -291,6 +319,10 @@ export function findAndReplaceById(ast: ASTNode, nodeId: string, replacement: AS
         return { ...n, factors: n.factors.map(walk) };
       case 'call':
         return { ...n, arg: walk(n.arg) };
+      case 'rel':
+        return { ...n, left: walk(n.left), right: walk(n.right) } as any;
+      case 'diff':
+        return { ...n, var: walk(n.var), arg: walk(n.arg) } as any;
     }
   }
   return walk(ast);
@@ -323,6 +355,9 @@ export function findNodeById(ast: ASTNode, nodeId: string): ASTNode | null {
       return findNodeById(ast.arg, nodeId);
     case 'rel': {
       return findNodeById(ast.left, nodeId) || findNodeById(ast.right, nodeId);
+    }
+    case 'diff': {
+      return findNodeById(ast.var, nodeId) || findNodeById(ast.arg, nodeId);
     }
   }
 }
@@ -392,6 +427,11 @@ export function astToAsciiMath(ast: ASTNode): string {
       case 'rel': {
         const sym = n.op === 'eq' ? '=' : n.op === 'lt' ? '<' : n.op === 'le' ? '<=' : n.op === 'gt' ? '>' : '>=';
         return `${toAM(n.left)} ${sym} ${toAM(n.right)}`;
+      }
+      case 'diff': {
+        const v = n.var.kind === 'ident' ? (n.var as any).name : toAM(n.var);
+        const argStr = `(${toAM(n.arg)})`;
+        return `d/d${v} ${argStr}`;
       }
     }
   }

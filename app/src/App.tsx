@@ -5,6 +5,18 @@ import { parsePlainText } from './lib/plaintext';
 import { parseContentMathMLToAst, withIds as withIdsContent, findAndReplaceById, astToContentMathML, astToPresentationMathML, findNodeById, astToAsciiMath } from './lib/contentAst';
 import { serializeSession, parseSession, triggerDownload } from './lib/session';
 
+// Safe CSS.escape fallback for older browsers
+function cssEscapeSafe(id: string): string {
+  try {
+    const CSSAny: any = (window as any).CSS;
+    if (CSSAny && typeof CSSAny.escape === 'function') {
+      return CSSAny.escape(id);
+    }
+  } catch {}
+  // Fallback: escape characters that can break attribute selectors
+  return String(id).replace(/["'\\\[\]\(\)\.#:;\s]/g, '\\$&');
+}
+
 // Minimal global typing for MathJax on window
 declare global {
   interface Window {
@@ -405,6 +417,9 @@ function App() {
           case 'rel':
             kids = [n.left, n.right];
             break;
+          case 'diff':
+            kids = [n.var, n.arg];
+            break;
         }
         children.set(id, kids.map((k: any) => (k as any).id));
         for (const k of kids) add(k, id);
@@ -436,7 +451,7 @@ function App() {
     const startId = dragStartId;
     setDragStartId(null);
     if (!startId || !endEl) return;
-    const startEl = (document.querySelector(`[data-node-id="${CSS.escape(startId)}"]`) as HTMLElement) || null;
+    const startEl = (document.querySelector(`[data-node-id="${cssEscapeSafe(startId)}"]`) as HTMLElement) || null;
     if (!startEl) return;
     // Compute LCA that has data-node-id
     const startAncestors = new Set<string>();
@@ -543,7 +558,6 @@ function App() {
 	return (
     <div className="app">
       <header className="app-header">
-        <h1>Hello World - Math Expression Rewriting App</h1>
         <p>Computer Assisted Math Expression Rewriting Web Application</p>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '0.5rem' }}>
           <button onClick={handleSaveSession}>Save (.eqace)</button>
@@ -793,17 +807,38 @@ function App() {
                   let equalityHTML = '';
                   let replacementInner = '';
                   try {
-                    const selEl = selectedNodeId ? document.querySelector(`[data-node-id="${CSS.escape(selectedNodeId)}"]`) as HTMLElement | null : null;
+                    const selEl = selectedNodeId ? document.querySelector(`[data-node-id="${cssEscapeSafe(selectedNodeId)}"]`) as HTMLElement | null : null;
                     const selHTML = selEl ? selEl.outerHTML : '';
                     // Extract inner of replacement <math> to avoid nested <math>
+                    // Prefer regenerating presentation from Content MathML using our local printer to guarantee parentheses
                     try {
-                      const parser = new DOMParser();
-                      const doc = parser.parseFromString(opt.replacementPresentationMathML, 'text/html');
-                      const m = doc.querySelector('math');
-                      if (m) {
-                        replacementInner = Array.from(m.childNodes).map((n) => (n as HTMLElement).outerHTML || n.textContent || '').join('');
+                      let regenerated = '';
+                      try {
+                        const replAst = withIdsContent(parseContentMathMLToAst(opt.replacementContentMathML));
+                        const fullPres = astToPresentationMathML(replAst);
+                        const m = fullPres.match(/^<math[\s\S]*?>([\s\S]*?)<\/math>$/i);
+                        regenerated = m ? m[1] : fullPres;
+                      } catch {
+                        regenerated = '';
+                      }
+                      if (regenerated) {
+                        replacementInner = regenerated;
                       } else {
-                        replacementInner = opt.replacementPresentationMathML;
+                        // Fallback: parse backend PMML as XML and serialize children to preserve structure
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(opt.replacementPresentationMathML, 'application/xml');
+                        let m: Element | null = null;
+                        try {
+                          m = (doc.getElementsByTagNameNS && (doc as any).getElementsByTagNameNS('http://www.w3.org/1998/Math/MathML', 'math')[0]) || doc.getElementsByTagName('math')[0];
+                        } catch {
+                          m = doc.getElementsByTagName('math')[0];
+                        }
+                        if (m) {
+                          const ser = new XMLSerializer();
+                          replacementInner = Array.from(m.childNodes).map((n) => ser.serializeToString(n as Node)).join('');
+                        } else {
+                          replacementInner = opt.replacementPresentationMathML;
+                        }
                       }
                     } catch {
                       replacementInner = opt.replacementPresentationMathML;

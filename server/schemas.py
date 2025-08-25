@@ -24,6 +24,7 @@ class RewriteRule(str, Enum):
     TRIGSIMP = "trigsimp"
     RATIONALIZE = "rationalize"
     CANCEL = "cancel"
+    COMPLETE_SQUARE = "complete_square"
 
 
 class ParseRequest(BaseModel):
@@ -115,6 +116,9 @@ class RewriteOption(BaseModel):
 class RewriteOptionsRequest(BaseModel):
     contentMathML: str
     selectedNodeId: str
+    assumptions: Optional[Dict[str, str]] = Field(
+        None, description="Variable assumptions, e.g., {'x':'real','y':'complex','r':'positive'}"
+    )
 
 
 class RewriteOptionsResponse(BaseModel):
